@@ -97,7 +97,6 @@ func wrapLine(line string, width int, prefix, suffix string, includeFirst bool) 
 // numLinks is the number of links that exist so far.
 // width is the number of columns to wrap to.
 //
-//
 // proxied is whether the request is through the gemini:// scheme.
 // If it's not a gemini:// page, set this to true.
 func convertRegularGemini(s string, numLinks, width int, proxied bool) (string, []string) {
@@ -415,7 +414,15 @@ func RenderGemini(s string, width int, proxied bool) (string, []string) {
 		rendered += ren
 	}
 
-	for i := range lines {
+lineLoop:
+	for i, line := range lines {
+		badWords := viper.GetStringSlice("filter.skip_lines_containing")
+		for _, word := range badWords {
+			if strings.Contains(line, word) {
+				continue lineLoop
+			}
+		}
+
 		if strings.HasPrefix(lines[i], "```") {
 			if pre {
 				// In a preformatted block, so add the text as is

@@ -1,6 +1,7 @@
 // Package config initializes all files required for Amfora, even those used by
 // other packages. It also reads in the config file and initializes a Viper and
 // the theme
+//
 //nolint:golint,goerr113
 package config
 
@@ -299,6 +300,7 @@ func Init() error {
 	viper.SetDefault("subscriptions.workers", 3)
 	viper.SetDefault("subscriptions.entries_per_page", 20)
 	viper.SetDefault("subscriptions.header", true)
+	viper.SetDefault("filter.skip_lines_matching", []string{})
 
 	viper.SetConfigFile(configPath)
 	viper.SetConfigType("toml")
